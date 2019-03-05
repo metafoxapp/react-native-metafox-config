@@ -3,11 +3,20 @@
 
 @implementation RNPhpfoxConfig
 
-- (dispatch_queue_t)methodQueue
-{
-    return dispatch_get_main_queue();
-}
 RCT_EXPORT_MODULE()
 
++ (BOOL)requiresMainQueueSetup
+{
+    return NO;
+}
+
+- (NSDictionary *)constantsToExport {
+    NSDictionary *infoPlistDict = [[NSBundle mainBundle] infoDictionary];
+    return @{
+             @"phpFoxServerUrl": infoPlistDict[@"phpFoxServerUrl"],
+             @"phpFoxApiClientId": infoPlistDict[@"phpFoxApiClientId"],
+             @"phpFoxApiClientSecret": infoPlistDict[@"phpFoxApiClientSecret"]
+             };
+}
 @end
   
