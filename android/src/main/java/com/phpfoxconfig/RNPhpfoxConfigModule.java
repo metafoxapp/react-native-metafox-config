@@ -3,7 +3,6 @@ package com.phpfoxconfig;
 
 import android.content.Context;
 import android.content.res.Resources;
-
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 
@@ -28,32 +27,31 @@ public class RNPhpfoxConfigModule extends ReactContextBaseJavaModule {
     }
 
     public String getResourceStringValue(Context context, String resourceName) {
-        int resId = context.getResources().getIdentifier(resourceName, "string", context.getPackageName());
-        String result = null;
+        String result = "";
         try {
+            int resId = context.getResources().getIdentifier(resourceName, "string", context.getPackageName());
             result = context.getString(resId);
         } catch (Resources.NotFoundException e) {
-            //
+            result = "Not found exception";
         }
         return result;
     }
 
-    public void addToConstants(HashMap<String, Object> constants, Context context, String resourceName) {
+    public void addToConstants(HashMap<String, Object> constants, Context context, String keyName, String resourceName) {
         String value = this.getResourceStringValue(context, resourceName);
-        constants.put(resourceName, value);
-
+        constants.put(keyName, value);
     }
 
     @Override
-    public @Nullable
-    Map<String, Object> getConstants() {
+    public Map<String, Object> getConstants() {
         HashMap<String, Object> constants = new HashMap<String, Object>();
         Context context = getReactApplicationContext();
 
-        this.addToConstants(constants, context, "PHPFOX_SERVER_URL");
-        this.addToConstants(constants, context, "PHPFOX_API_CLIENT_ID");
-        this.addToConstants(constants, context, "PHPFOX_API_CLIENT_SECRET");
+        this.addToConstants(constants, context, "phpFoxServerUrl","PHPFOX_SERVER_URL");
+        this.addToConstants(constants, context, "phpFoxApiClientId","PHPFOX_API_CLIENT_ID");
+        this.addToConstants(constants, context, "phpFoxApiClientSecret","PHPFOX_API_CLIENT_SECRET");
 
+//        constants.put("phpFoxServerUrl", "https://product-qc.younetco.com/mobile");
         return constants;
     }
 }
