@@ -3,6 +3,7 @@ package com.phpfoxconfig;
 
 import android.content.Context;
 import android.content.res.Resources;
+
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 
@@ -42,16 +43,46 @@ public class RNPhpfoxConfigModule extends ReactContextBaseJavaModule {
         constants.put(keyName, value);
     }
 
+    public Map<String, Object> getCommonValues(Context context) {
+
+        HashMap<String, Object> values = new HashMap<String, Object>();
+        HashMap<String, Object> initialRouteParams = new HashMap<String, Object>();
+
+        this.addToConstants(values, context, "serverUrl", "PHPFOX_SERVER_URL");
+        this.addToConstants(values, context, "clientId", "PHPFOX_API_CLIENT_ID");
+        this.addToConstants(values, context, "clientSecret", "PHPFOX_API_CLIENT_SECRET");
+
+        values.put("enabledAnalytic", true);
+        values.put("isMultiSiteApp", true);
+
+        values.put("initialRouteName", "home");
+        values.put("homePageNotLoggedIn", "login");
+        values.put("initialRouteParams", initialRouteParams);
+
+        return values;
+    }
+
+    public Map<String, Object> getThemeValues(Context context) {
+
+        HashMap<String, Object> values = new HashMap<String, Object>();
+
+        this.addToConstants(values, context, "grayBaseColor", "THEME_GRAY_BASE_COLOR");
+        this.addToConstants(values, context, "primaryColor", "THEME_PRIMARY_COLOR");
+
+        return values;
+    }
+
+
     @Override
     public Map<String, Object> getConstants() {
+
         HashMap<String, Object> constants = new HashMap<String, Object>();
+
         Context context = getReactApplicationContext();
 
-        this.addToConstants(constants, context, "phpFoxServerUrl","PHPFOX_SERVER_URL");
-        this.addToConstants(constants, context, "phpFoxApiClientId","PHPFOX_API_CLIENT_ID");
-        this.addToConstants(constants, context, "phpFoxApiClientSecret","PHPFOX_API_CLIENT_SECRET");
+        constants.put("commonValues", getCommonValues(context));
+        constants.put("themeValues", getThemeValues(context));
 
-//        constants.put("phpFoxServerUrl", "https://product-qc.younetco.com/mobile");
         return constants;
     }
 }

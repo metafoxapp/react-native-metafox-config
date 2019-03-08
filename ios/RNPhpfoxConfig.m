@@ -12,10 +12,28 @@ RCT_EXPORT_MODULE()
 
 - (NSDictionary *)constantsToExport {
     NSDictionary *infoPlistDict = [[NSBundle mainBundle] infoDictionary];
+    
+    NSDictionary * commonValues = @{
+             @"serverUrl": infoPlistDict[@"phpFoxServerUrl"],
+             @"clientId": infoPlistDict[@"phpFoxApiClientId"],
+             @"clientSecret": infoPlistDict[@"phpFoxApiClientSecret"],
+             @"enabledAnalytic": @true,
+             @"isMultiSiteApp": @true,
+             // route
+             @"initialRouteStack": @"homeStack",
+             @"initialRouteName": @"home",
+             @"initialRouteParams": @{},
+             @"homePageNotLoggedIn":@"login"
+             };
+    
+    NSDictionary * themeValues =  @{
+                                    @"primaryColor": infoPlistDict[@"themePrimaryColor"],
+                                    @"grayBaseColor": infoPlistDict[@"themeGrayBaseColor"],
+                                    };
+    
     return @{
-             @"phpFoxServerUrl": infoPlistDict[@"phpFoxServerUrl"],
-             @"phpFoxApiClientId": infoPlistDict[@"phpFoxApiClientId"],
-             @"phpFoxApiClientSecret": infoPlistDict[@"phpFoxApiClientSecret"]
+             @"commonValues": commonValues,
+             @"themeValues": themeValues,
              };
 }
 @end
