@@ -53,7 +53,6 @@ public class RNPhpfoxConfigModule extends ReactContextBaseJavaModule {
         this.addToConstants(values, context, "clientSecret", "PHPFOX_API_CLIENT_SECRET");
 
         values.put("enabledAnalytic", true);
-        values.put("isMultiSiteApp", true);
 
         values.put("initialRouteName", "home");
         values.put("homePageNotLoggedIn", "login");

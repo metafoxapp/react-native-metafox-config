@@ -18,7 +18,6 @@ RCT_EXPORT_MODULE()
              @"clientId": infoPlistDict[@"phpFoxApiClientId"],
              @"clientSecret": infoPlistDict[@"phpFoxApiClientSecret"],
              @"enabledAnalytic": @true,
-             @"isMultiSiteApp": @true,
              // route
              @"initialRouteStack": @"homeStack",
              @"initialRouteName": @"home",

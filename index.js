@@ -7,12 +7,19 @@ const getServerApiUrlFromServerApiUrl = (serverUrl) => {
     'index.php/index.php', 'index.php')
 }
 
+const validateIsMultiSiteApp = () => {
+  if (RNPhpfoxConfig.commonValues.isMultiSiteApp === undefined) {
+    return RNPhpfoxConfig.commonValues.serverUrl.startsWith('https://mobileapi.phpfox.com')
+  }
+  return RNPhpfoxConfig.commonValues.isMultiSiteApp
+}
+
 export const ThemeValues: {
   primaryColor: String,
   grayBaseColor: String,
-}  =  Object.assign({
-  primaryColor: "#2681D5",
-  grayBaseColor: "#111111",
+} = Object.assign({
+  primaryColor: '#2681D5',
+  grayBaseColor: '#111111'
 }, RNPhpfoxConfig.themeValues)
 
 export const CommonValues: {
@@ -33,7 +40,7 @@ export const CommonValues: {
     password: ''
   },
   enabledAnalytic: true,
-  isMultiSiteApp: false,
+  isMultiSiteApp: validateIsMultiSiteApp(),
   initialRouteStack: 'homeStack',
   initialRouteName: 'home',
   initialRouteParams: {},
