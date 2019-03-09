@@ -1,4 +1,8 @@
-export { configVariable } from './src/configVariable'
-export { commonVariable } from './src/commonVariable'
-export { themeVariable } from './src/themeVariable'
+export const Configs = require('react-native').NativeModules.RNPhpfoxConfig.values
 
+const getServerApiUrlFromServerApiUrl = (serverUrl) => {
+  return (serverUrl.replace(/([/]+$)/g, '') + '/index.php/restful_api/').replace(
+    'index.php/index.php', 'index.php')
+}
+
+Configs.serverApiUrl = getServerApiUrlFromServerApiUrl(Configs.serverUrl)

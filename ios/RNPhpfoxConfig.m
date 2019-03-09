@@ -16,7 +16,7 @@ RCT_EXPORT_MODULE()
 
     [[NSBundle mainBundle] bundlePath];
 
-    NSString *fileName = [[NSBundle mainBundle] pathForResource:@"Config"
+    NSString *fileName = [[NSBundle mainBundle] pathForResource:@"configuration"
                                                          ofType:@"json"];
     NSDictionary *result = @{};
     //check file exists
@@ -33,10 +33,10 @@ RCT_EXPORT_MODULE()
             NSLog(@"Something went wrong! %@", error.localizedDescription);
         }
     } else {
-        NSLog(@"Config.json file could not be found");
+        NSLog(@"configuration.json file could not be found");
     }
 
-    return @{@"configVariable": result};
+    return @{@"values": result};
 }
 @end
 

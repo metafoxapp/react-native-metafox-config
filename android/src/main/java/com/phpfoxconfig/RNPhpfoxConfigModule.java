@@ -3,12 +3,18 @@ package com.phpfoxconfig;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.InputStream;
+
+import com.google.gson.stream.JsonReader;
+import com.google.gson.Gson;
 
 
 import javax.annotation.Nullable;
@@ -16,6 +22,8 @@ import javax.annotation.Nullable;
 public class RNPhpfoxConfigModule extends ReactContextBaseJavaModule {
 
     private final ReactApplicationContext reactContext;
+
+    private static String TAG = "RNPhpfoxConfig";
 
     public RNPhpfoxConfigModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -27,48 +35,23 @@ public class RNPhpfoxConfigModule extends ReactContextBaseJavaModule {
         return "RNPhpfoxConfig";
     }
 
-    public String getResourceStringValue(Context context, String resourceName) {
-        String result = "";
+    public Map<String, Object> loadJSONFromAsset(String fileName, Context context) {
+        String jsonString = null;
         try {
-            int resId = context.getResources().getIdentifier(resourceName, "string", context.getPackageName());
-            result = context.getString(resId);
-        } catch (Resources.NotFoundException e) {
-            result = "Not found exception";
+            InputStream is = context.getAssets().open(fileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            jsonString = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
         }
-        return result;
-    }
+        Gson gson = new Gson();
 
-    public void addToConstants(HashMap<String, Object> constants, Context context, String keyName, String resourceName) {
-        String value = this.getResourceStringValue(context, resourceName);
-        constants.put(keyName, value);
-    }
-
-    public Map<String, Object> getCommonValues(Context context) {
-
-        HashMap<String, Object> values = new HashMap<String, Object>();
-        HashMap<String, Object> initialRouteParams = new HashMap<String, Object>();
-
-        this.addToConstants(values, context, "serverUrl", "PHPFOX_SERVER_URL");
-        this.addToConstants(values, context, "clientId", "PHPFOX_API_CLIENT_ID");
-        this.addToConstants(values, context, "clientSecret", "PHPFOX_API_CLIENT_SECRET");
-
-        values.put("enabledAnalytic", true);
-
-        values.put("initialRouteName", "home");
-        values.put("homePageNotLoggedIn", "login");
-        values.put("initialRouteParams", initialRouteParams);
-
-        return values;
-    }
-
-    public Map<String, Object> getThemeValues(Context context) {
-
-        HashMap<String, Object> values = new HashMap<String, Object>();
-
-        this.addToConstants(values, context, "grayBaseColor", "THEME_GRAY_BASE_COLOR");
-        this.addToConstants(values, context, "primaryColor", "THEME_PRIMARY_COLOR");
-
-        return values;
+        Map<String, Object> map = new HashMap<String, Object>();
+        return (Map<String, Object>) gson.fromJson(jsonString, map.getClass());
     }
 
 
@@ -76,11 +59,9 @@ public class RNPhpfoxConfigModule extends ReactContextBaseJavaModule {
     public Map<String, Object> getConstants() {
 
         HashMap<String, Object> constants = new HashMap<String, Object>();
-
         Context context = getReactApplicationContext();
 
-        constants.put("commonValues", getCommonValues(context));
-        constants.put("themeValues", getThemeValues(context));
+        constants.put("values", loadJSONFromAsset("configuration.json", context));
 
         return constants;
     }
