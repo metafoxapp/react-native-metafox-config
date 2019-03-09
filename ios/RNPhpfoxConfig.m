@@ -10,30 +10,33 @@ RCT_EXPORT_MODULE()
     return NO;
 }
 
+
 - (NSDictionary *)constantsToExport {
-    NSDictionary *infoPlistDict = [[NSBundle mainBundle] infoDictionary];
-    
-    NSDictionary * commonValues = @{
-             @"serverUrl": infoPlistDict[@"phpFoxServerUrl"],
-             @"clientId": infoPlistDict[@"phpFoxApiClientId"],
-             @"clientSecret": infoPlistDict[@"phpFoxApiClientSecret"],
-             @"enabledAnalytic": @true,
-             // route
-             @"initialRouteStack": @"homeStack",
-             @"initialRouteName": @"home",
-             @"initialRouteParams": @{},
-             @"homePageNotLoggedIn":@"login"
-             };
-    
-    NSDictionary * themeValues =  @{
-                                    @"primaryColor": infoPlistDict[@"themePrimaryColor"],
-                                    @"grayBaseColor": infoPlistDict[@"themeGrayBaseColor"],
-                                    };
-    
-    return @{
-             @"commonValues": commonValues,
-             @"themeValues": themeValues,
-             };
+    //get file name
+
+    [[NSBundle mainBundle] bundlePath];
+
+    NSString *fileName = [[NSBundle mainBundle] pathForResource:@"Config"
+                                                         ofType:@"json"];
+    NSDictionary *result = @{};
+    //check file exists
+    if (fileName) {
+        //retrieve file content
+        NSData *partyData = [[NSData alloc] initWithContentsOfFile:fileName];
+
+        //convert JSON NSData to a usable NSDictionary
+        NSError *error;
+        result = [NSJSONSerialization JSONObjectWithData:partyData
+                                                               options:0
+                                                                 error:&error];
+        if (error) {
+            NSLog(@"Something went wrong! %@", error.localizedDescription);
+        }
+    } else {
+        NSLog(@"Config.json file could not be found");
+    }
+
+    return @{@"configVariable": result};
 }
 @end
-  
+
