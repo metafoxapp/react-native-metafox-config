@@ -1,4 +1,6 @@
-export const Configs = require('react-native').NativeModules.RNPhpfoxConfig.values
+const originConfigs = require('react-native').NativeModules.RNPhpfoxConfig.values
+
+export const Configs = Object.assign({}, originConfigs, {privateInfo: undefined})
 
 const getServerApiUrlFromServerApiUrl = (serverUrl) => {
   return (serverUrl.replace(/([/]+$)/g, '') + '/index.php/restful_api/').replace(
