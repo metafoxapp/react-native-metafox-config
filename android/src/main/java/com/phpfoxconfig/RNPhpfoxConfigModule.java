@@ -23,6 +23,8 @@ public class RNPhpfoxConfigModule extends ReactContextBaseJavaModule {
 
     private final ReactApplicationContext reactContext;
 
+    private static String FILE_NAME =  "configuration.jsbundle";
+
     private static String TAG = "RNPhpfoxConfig";
 
     public RNPhpfoxConfigModule(ReactApplicationContext reactContext) {
@@ -36,7 +38,7 @@ public class RNPhpfoxConfigModule extends ReactContextBaseJavaModule {
     }
 
     public Map<String, Object> loadJSONFromAsset(String fileName, Context context) {
-        String jsonString = null;
+        String jsonString = "{}";
         try {
             InputStream is = context.getAssets().open(fileName);
             int size = is.available();
@@ -46,7 +48,6 @@ public class RNPhpfoxConfigModule extends ReactContextBaseJavaModule {
             jsonString = new String(buffer, "UTF-8");
         } catch (IOException ex) {
             ex.printStackTrace();
-            return null;
         }
         Gson gson = new Gson();
 
@@ -61,7 +62,7 @@ public class RNPhpfoxConfigModule extends ReactContextBaseJavaModule {
         HashMap<String, Object> constants = new HashMap<String, Object>();
         Context context = getReactApplicationContext();
 
-        constants.put("values", loadJSONFromAsset("configuration.json", context));
+        constants.put("values", loadJSONFromAsset(FILE_NAME, context));
 
         return constants;
     }

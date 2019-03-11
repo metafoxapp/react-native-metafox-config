@@ -17,7 +17,7 @@ RCT_EXPORT_MODULE()
     [[NSBundle mainBundle] bundlePath];
 
     NSString *fileName = [[NSBundle mainBundle] pathForResource:@"configuration"
-                                                         ofType:@"json"];
+                                                         ofType:@"jsbundle"];
     NSDictionary *result = @{};
     //check file exists
     if (fileName) {
@@ -27,13 +27,13 @@ RCT_EXPORT_MODULE()
         //convert JSON NSData to a usable NSDictionary
         NSError *error;
         result = [NSJSONSerialization JSONObjectWithData:partyData
-                                                               options:0
-                                                                 error:&error];
+                                                 options:0
+                                                   error:&error];
         if (error) {
             NSLog(@"Something went wrong! %@", error.localizedDescription);
         }
     } else {
-        NSLog(@"configuration.json file could not be found");
+        NSLog(@"configuration_merged file could not be found");
     }
 
     return @{@"values": result};
