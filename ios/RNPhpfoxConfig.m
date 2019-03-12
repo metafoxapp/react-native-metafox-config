@@ -14,28 +14,33 @@ RCT_EXPORT_MODULE()
 - (NSDictionary *)constantsToExport {
     //get file name
 
-    [[NSBundle mainBundle] bundlePath];
-
-    NSString *fileName = [[NSBundle mainBundle] pathForResource:@"configuration"
-                                                         ofType:@"jsbundle"];
-    NSDictionary *result = @{};
+    NSString *configurationFileName = [[NSBundle mainBundle] pathForResource:@"configuration"
+                                                                      ofType:@"json"];
+    
+    NSString *googleServiceInfoFileName = [[NSBundle mainBundle] pathForResource:@"GoogleService-Info"
+                                                                          ofType:@"plist"];
+    
+    NSDictionary *googleServiceInfoDict = [NSDictionary dictionaryWithContentsOfFile:googleServiceInfoFileName];
+    
     //check file exists
-    if (fileName) {
-        //retrieve file content
-        NSData *partyData = [[NSData alloc] initWithContentsOfFile:fileName];
-
-        //convert JSON NSData to a usable NSDictionary
-        NSError *error;
-        result = [NSJSONSerialization JSONObjectWithData:partyData
-                                                 options:0
-                                                   error:&error];
-        if (error) {
-            NSLog(@"Something went wrong! %@", error.localizedDescription);
-        }
-    } else {
-        NSLog(@"configuration_merged file could not be found");
+    //retrieve file content
+    NSData *infoData = [[NSData alloc] initWithContentsOfFile:configurationFileName];
+    
+    //convert JSON NSData to a usable NSDictionary
+    NSError *error;
+    NSMutableDictionary *result = [NSJSONSerialization JSONObjectWithData:infoData
+                                                                  options:NSJSONReadingMutableContainers
+                                                                    error:&error];
+    if (error) {
+        NSLog(@"Something went wrong! %@", error.localizedDescription);
     }
 
+    [result setValue:googleServiceInfoDict
+              forKey:@"googleServiceInfo"];
+    
+    [result setValue:@{}
+              forKey:@"privateInfo"];
+    
     return @{@"values": result};
 }
 @end
