@@ -4,9 +4,11 @@ package com.phpfoxconfig;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
+import android.content.SharedPreferences;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
+import com.facebook.react.bridge.ReactMethod;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -27,9 +29,14 @@ public class RNPhpfoxConfigModule extends ReactContextBaseJavaModule {
 
     private static String TAG = "RNPhpfoxConfig";
 
+    private static String PREFERENCE_NAME = "USER_CONFIG";
+
+    private SharedPreferences mSharedPreferences;
+
     public RNPhpfoxConfigModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
+        this.mSharedPreferences = reactContext.getSharedPreferences(PREFERENCE_NAME, reactContext.MODE_PRIVATE);
     }
 
     @Override
@@ -62,8 +69,18 @@ public class RNPhpfoxConfigModule extends ReactContextBaseJavaModule {
         HashMap<String, Object> constants = new HashMap<String, Object>();
         Context context = getReactApplicationContext();
 
-        constants.put("values", loadJSONFromAsset(FILE_NAME, context));
+        Map<String, Object> map = loadJSONFromAsset(FILE_NAME, context);
+        Map<String, ?> userConfigData = this.mSharedPreferences.getAll();
+
+        map.put("userConfig", userConfigData);
+        constants.put("values", map);
 
         return constants;
+    }
+
+    @ReactMethod
+    public void saveUserConfig(String key, String value) {
+        SharedPreferences.Editor editor = this.mSharedPreferences.edit();
+        editor.putString(key, (String) value).commit();
     }
 }
