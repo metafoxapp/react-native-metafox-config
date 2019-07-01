@@ -31,7 +31,8 @@ export const commonVariable: CommonVariable = Object.assign({
   initialRouteParams: {},
   homePageNotLoggedIn: 'login',
   userConfig: {
-    themeName: 'PRIMARY'
+    themeName: 'PRIMARY',
+    layoutDirection: 'ltr'
   }
   serverApiUrl: getServerApiUrlFromServerApiUrl(configVariable.commonVariable.serverUrl)
 
