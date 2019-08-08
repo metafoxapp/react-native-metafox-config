@@ -1,12 +1,12 @@
+require "json"
 
+package = JSON.parse(File.read(File.join(__dir__, "../package.json")))
 Pod::Spec.new do |s|
   s.name         = "RNPhpfoxConfig"
-  s.version      = "1.0.0"
+  s.version      = package["version"]
   s.summary      = "RNPhpfoxConfig"
-  s.description  = <<-DESC
-                  RNPhpfoxConfig
-                   DESC
-  s.homepage     = ""
+  s.description  = package["description"]
+  s.homepage     = package["homepage"]
   s.license      = "MIT"
   # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
   s.author             = { "author" => "author@domain.cn" }
