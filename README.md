@@ -1,6 +1,8 @@
 
 # react-native-phpfox-config
 
+(TBD): update this readme file
+
 ## Getting started
 
 `$ npm install react-native-phpfox-config --save`
@@ -50,4 +52,3 @@ import RNPhpfoxConfig from 'react-native-phpfox-config';
 // TODO: What to do with the module?
 RNPhpfoxConfig;
 ```
-  
