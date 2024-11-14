@@ -39,14 +39,19 @@ declare module "react-native-phpfox-config" {
     // App config from android/configuration.json or ios/configuration.json when build
     appName: string;
     bundleId: string;
+    shareExtensionId: string;
+    groupId: string;
+    merchantId: string;
     clientId: string;
-    versionName: string;
     clientSecret: string;
+    versionName: string;
     serverApiUrl: string;
     pingServerUrl: string;
     isMultiSiteApp: boolean;
     versionBuildNumber: string;
     firebaseEnabledAnalytic: boolean;
+    themeVariant: string;
+
     //
     enableLog: boolean;
     enableAudio: boolean;
